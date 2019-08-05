@@ -15,7 +15,7 @@ class Config:
 
 # the config for development
 class DevelopmentConfig(Config):
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:Chengyu0402_@111.231.56.173:3306/eat'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:Chengyu0402_@111.231.56.173:3306/eatFlask'
     DEBUG = True
 
 
