@@ -13,7 +13,7 @@ from flask import request, jsonify
 
 from app import db
 from app.api.auth import serializer
-from app.libs import MemberService
+from app.libs.MemberService import MemberService
 from app.models import User
 from app.utils.comm import json_response
 from app.utils.errorCode import WX_CODE_ERR, WX_SERVER_ERR
@@ -36,7 +36,7 @@ def login():
     if not code or len(code) < 1:
         return jsonify(json_response(*WX_CODE_ERR))
 
-    openid = MemberService.MemberService(code)
+    openid = MemberService.getWeChatOpenId(code)
 
     if not openid:
         return jsonify(json_response(*WX_SERVER_ERR))

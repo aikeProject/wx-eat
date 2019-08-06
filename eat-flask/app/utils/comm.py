@@ -11,7 +11,7 @@
 """
 
 
-def json_response(status='', message='', data=None):
+def json_response(status=200, message='', data=None):
     data = data if isinstance(data, dict) else {}
 
     return {
