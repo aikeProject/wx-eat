@@ -1,6 +1,6 @@
 # -*- coding=utf-8 -*-
 class Config:
-    SECRET_KEY = 'mrsoft'
+    SECRET_KEY = 'chengyu'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     # 小程序配置信息
     AppID = 'wxa19a5fe3f2b83a96'

@@ -27,3 +27,24 @@ class User(db.Model):
     def __repr__(self):
         return '<User %r>' % self.name
 
+
+# 菜系表
+class Category(db.Model):
+    __tablename__ = "category"
+    id = db.Column(db.Integer, primary_key=True)  # 编号
+    name = db.Column(db.String(255), unique=True)  # 标题
+    order_num = db.Column(db.Integer, default=0)  # 序号
+    addtime = db.Column(db.DateTime, index=True, default=datetime.now)  # 添加时间
+    food = db.relationship("Food", backref='category')  # 外键关系关联
+
+
+# 美食表
+class Food(db.Model):
+    __tablename__ = "food"
+    id = db.Column(db.Integer, primary_key=True)  # 编号
+    name = db.Column(db.String(100))  # 标题
+    addtime = db.Column(db.DateTime, index=True, default=datetime.now)  # 添加景区时间
+    cate_id = db.Column(db.Integer, db.ForeignKey('category.id'))  # 所属菜系
+
+    def __repr__(self):
+        return "<Food %r>" % self.name
