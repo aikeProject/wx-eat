@@ -12,3 +12,4 @@
 
 WX_CODE_ERR = (201, '需要微信授权code',)
 WX_SERVER_ERR = (201, '调用微信出错',)
+RECORD_ERR = (201, '记录失败')

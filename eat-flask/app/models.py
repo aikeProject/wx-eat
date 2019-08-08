@@ -48,3 +48,36 @@ class Food(db.Model):
 
     def __repr__(self):
         return "<Food %r>" % self.name
+
+
+# 订餐表
+class Record(db.Model):
+    __tablename__ = 'record'
+    id = db.Column(db.Integer, primary_key=True)  # 编号
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # 用户id
+    food = db.Column(db.String(255))  # 食物
+    number = db.Column(db.Integer)  # 下单次数
+    addtime = db.Column(db.DateTime, index=True, default=datetime.now)  # 下单时间
+
+    def __repr__(self):
+        return "<Record %r>" % Record.id
+
+
+# 管理员
+class Admin(db.Model):
+    __tablename__ = "admin"
+    id = db.Column(db.Integer, primary_key=True)  # 编号
+    name = db.Column(db.String(100), unique=True)  # 管理员账号
+    pwd = db.Column(db.String(100))  # 管理员密码
+
+    def __repr__(self):
+        return "<Admin %r>" % self.name
+
+    def check_pwd(self, pwd):
+        """
+        检测密码是否正确
+        :param pwd: 密码
+        :return: 返回布尔值
+        """
+        from werkzeug.security import check_password_hash
+        return check_password_hash(self.pwd, pwd)
