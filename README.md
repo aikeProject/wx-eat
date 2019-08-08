@@ -30,25 +30,28 @@ pip install -r requirements.txt
 - 同步数据库(mysql)
 
 mysql配置
-`config.py`
+
+首先需要创建好叫`eatFlask`的数据库
+
+配置 `config.py`
 
 ```
 SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:密码@localhost:3306/eatFlask'
 ```
 
-首次使用 创建迁移仓库
+- 首次使用 创建迁移仓库
 
 ```
  python manage.py db init
 ```
 
-创建迁移脚本
+- 创建迁移脚本
 
 ```
 python manage.py db migrate 
 ```
 
-同步到数据库
+- 同步到数据库
 
 ```
 python manage.py db upgrade    
