@@ -1,66 +1,99 @@
-// pages/pie/pie.js
+import * as echarts from '../../ec-canvas/echarts.js';
+const utils = require('../../utils/util.js')
+
+const app = getApp();
+
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    ec: {
+      // 将 lazyLoad 设为 true 后，需要手动初始化图表
+      lazyLoad: true
+    },
+    loading: true,
+  },
+  onShow: function() {
+    // 获取组件
+    var that = this
+    utils.request('/api/record/list', 'post').then((res) => {
+      this.setData({
+        loading: false
+      });
+      this.getEC(res.list)
+    });
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-
+  getEC: function(data) {
+    this.ecComponent = this.selectComponent('#mychart-dom-pie');
+    if (this.ecComponent) {
+      var array = data
+      var option = {
+        title: {
+          text: '已选美食数据',
+          left: 'center'
+        },
+        color: ["#37A2DA", "#32C5E9", "#67E0E3", "#91F2DE", "#FFDB5C", "#FF9F7F", "#0099FF", "#33CCFF", "#33CC99"],
+        legend: {
+          bottom: 10,
+          left: 'center',
+          data: array,
+          selectedMode: false
+        },
+        series: [{
+          label: {
+            normal: {
+              formatter: '{b}:{c}次',
+              rich: {
+                b: {
+                  fontSize: 16,
+                  lineHeight: 16
+                },
+                c: {
+                  fontSize: 16,
+                  lineHeight: 16,
+                }
+              }
+            }
+          },
+          type: 'pie',
+          center: ['50%', '50%'],
+          radius: [0, '60%'],
+          data: array
+        }]
+      };
+      this.init(option);
+    }
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
+  // 点击按钮后初始化图表
+  init: function(options) {
+    this.ecComponent.init((canvas, width, height) => {
+      // 获取组件的 canvas、width、height 后的回调函数
+      // 在这里初始化图表
+      const chart = echarts.init(canvas, null, {
+        width: width,
+        height: height
+      });
+      chart.setOption(options);
+      // 将图表实例绑定到 this 上，可以在其他成员函数（如 dispose）中访问
+      this.chart = chart;
+      // 注意这里一定要返回 chart 实例，否则会影响事件处理等
+      return chart;
+    });
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+  cleanData: function() {
+    wx.showModal({
+      title: '提示',
+      content: '确定要清空并且重新统计吗？',
+      success: function(res) {
+        if (res.confirm) {
+          utils.request('/api/record/clear', 'post').then(() => {
+            wx.navigateTo({
+              url: '../success/success'
+            })
+          });
+        }
+      }
+    })
   }
 })

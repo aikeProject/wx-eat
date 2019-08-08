@@ -55,11 +55,11 @@ function request(
     req.success = function(res) {
       const data = res.data;
 
-      if (data.status) {
+      if (data.status === 200) {
         resolve(data.data, res);
       } else {
         wx.showToast({
-          title: res.message || '网络繁忙，请稍后重试',
+          title: data.message || '网络繁忙，请稍后重试',
           icon: 'none',
           duration: 2000
         });

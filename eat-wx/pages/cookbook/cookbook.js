@@ -1,66 +1,37 @@
-// pages/cookbook/cookbook.js
+const utils = require('../../utils/util.js')
+
+const app = getApp()
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    pageStatus: 'loading', // 加载标识
+    food: null, //  美食名称
+    cookbook: [] //  菜谱列表
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-
+  onLoad: function(option) {
+    this.setData({
+      food: option.food, // 为页面变量赋值
+    })
+    this.getCookBook(option.food) // 调用获取菜谱方法
   },
+  // 获取菜谱列表
+  getCookBook: function(food) {
+    this.setData({
+      pageStatus: 'loading'
+    })
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
+    utils.request('/api/food/cookbook', 'post', {
+      food: food
+    }).then((res) => {
+      this.setData({
+        cookbook: res.list,
+        pageStatus: 'done'
+      })
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+  // 跳转首页方法
+  goToIndex: function() {
+    wx.switchTab({
+      url: "../index/index"
+    });
   }
 })
